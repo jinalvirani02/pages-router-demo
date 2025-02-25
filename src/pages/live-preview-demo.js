@@ -21,7 +21,7 @@ const Stack = Contentstack.Stack({
 
 export async function getStaticProps() {
   try {
-    const entry = Stack.ContentType("lyrics").Entry("blt2000c7a1a79aa2cb");
+    const entry = Stack.ContentType("lyrics").Entry("blt1677f60f50596bdc");
     const result = await entry.toJSON().fetch();
     return {
       props: {result: result},
