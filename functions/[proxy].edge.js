@@ -2,12 +2,8 @@ export default async function handler(request, context) {
   const response = await fetch(request);
   let modifiedResponse = response.clone();
   const contentType = response.headers.get('content-type');
-
   if (contentType && contentType.includes('text/html')) {
     let html = await response.text();
-
-    const lyticsKey = context.env.LYTICS_KEY;
-
     const lyticsScript = `
       <script type="text/javascript">
         (function(){
@@ -45,26 +41,24 @@ export default async function handler(request, context) {
                 }),this
               }
             }();
-
             // Init Lytics
             jstag.init({
-              src: 'https://c.lytics.io/api/tag/${lyticsKey}/latest.min.js',
+              src: 'https://staging.lytics.io/api/tag/2d7c177a7a955062fe9eeb90ff856cc3/latest.min.js',
+              consent: {
+                disabled: true,
+              }
+              jstag.optIn();
             });
-
             // Initial pageView
             jstag.pageView();
             console.log("[Lytics] Initial pageView sent:", location.pathname);
-
             // Debounce repeated route changes
             let lastPath = location.pathname;
-
             const triggerLytics = () => {
               if (location.pathname === lastPath) return;
               lastPath = location.pathname;
               console.log("[Lytics] Route changed:", lastPath);
-
               jstag.pageView();
-
               if (jstag.loadEntity) {
                 jstag.config.pathfora = jstag.config.pathfora || {};
                 jstag.config.pathfora.publish = {
@@ -79,7 +73,6 @@ export default async function handler(request, context) {
                 });
               }
             };
-
             // SPA routing hooks
             const wrapHistory = (fn) => function(){
               const result = fn.apply(this, arguments);
@@ -91,11 +84,9 @@ export default async function handler(request, context) {
             window.addEventListener("popstate", () => {
               window.dispatchEvent(new Event('lytics:navigation'));
             });
-
             // Bind trigger to navigation event
             window.addEventListener("lytics:navigation", triggerLytics);
           };
-
           if ('requestIdleCallback' in window) {
             requestIdleCallback(initLytics);
           } else {
@@ -104,16 +95,13 @@ export default async function handler(request, context) {
         })();
       </script>
     `;
-
     // Inject script before </head>
     html = html.replace('</head>', `${lyticsScript}</head>`);
-
     modifiedResponse = new Response(html, {
       headers: response.headers,
       status: response.status,
       statusText: response.statusText,
     });
   }
-
   return modifiedResponse;
 }
