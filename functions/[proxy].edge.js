@@ -48,7 +48,9 @@ export default async function handler(request, context) {
                 disabled: false,
               }
             });
+
             jstag.optIn();
+            
             // Initial pageView
             jstag.pageView();
             console.log("[Lytics] Initial pageView sent:", location.pathname);
