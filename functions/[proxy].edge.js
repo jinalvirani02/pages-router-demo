@@ -49,7 +49,7 @@ export default async function handler(request, context) {
               }
             });
             console.log(jstag)
-            jstag.optIn({foo: 42});
+            jstag.optIn({});
 
             // Initial pageView
             jstag.pageView();
