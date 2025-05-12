@@ -48,7 +48,7 @@ export default async function handler(request, context) {
                 disabled: false,
               }
             });
-
+            console.log(jstag)
             jstag.optIn();
             
             // Initial pageView
