@@ -20,7 +20,7 @@ export default async function handler(request, context) {
                 }
               }
               n("send"),n("mock"),n("identify"),n("pageView"),n("unblock"),n("getid"),
-              n("setid"),n("loadEntity"),n("getEntity"),n("on"),n("once"),n("call"),
+              n("setid"),n("loadEntity"),n("getEntity"),n("on"),n("once"),n("call"),n("optIn"),
               o.loadScript=function(n,t,i){
                 var e=document.createElement("script");
                 e.async=!0,e.src=n,e.onload=t,e.onerror=i;
