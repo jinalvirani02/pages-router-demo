@@ -48,7 +48,7 @@ export default async function handler(request, context) {
                 disabled: false,
               }
             });
-
+            console.log("etag");
             // Initial pageView
             jstag.pageView();
             console.log("[Lytics] Initial pageView sent:", location.pathname);
