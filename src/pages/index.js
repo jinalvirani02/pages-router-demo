@@ -4,7 +4,7 @@ import styles from "../styles/home.module.css";
 export default function StaticImageComponent({ movies }) {
   return (
     <div className={styles.container}>
-      <h1 className={styles.mainHeading}>Page Router Demo</h1>
+      <h1 className={styles.mainHeading}>Page Router Demo 1</h1>
 
       <div className={styles.section}>
         <h1 className={styles.subHeading}>Tom and Jerry</h1>
