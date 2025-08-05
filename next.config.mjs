@@ -3,11 +3,11 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/posts-with-odr/:id",
+        source: "/(.*)",
         headers: [
           {
               key: "cache-control",
-              value: "max-age=0, s-maxage=40, stale-while-revalidate=10"
+              value: "public, s-maxage=86400, stale-while-revalidate=300"
           },
         ],
       },
