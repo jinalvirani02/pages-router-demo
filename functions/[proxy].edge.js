@@ -1,30 +1,34 @@
-
-export default async function handler() {
+export default async function handler(request, context) {
   try {
+    // Call the external API
     const response = await fetch(
       'https://nextjs-launch-challenge-test.devcontentstackapps.com/api/test'
     );
 
-    // Check status first
-    if (!response.ok) {
-      console.error('API returned status:', response.status);
-      return new Response('Error fetching API', { status: response.status });
-    }
+    // Parse its body
+    const responseBody = await response.json();
 
-    let data;
-    try {
-      data = await response.json(); // Try parsing JSON
-    } catch {
-      const text = await response.text(); // Fallback if JSON fails
-      console.warn('Response is not JSON:', text);
-      data = text;
-    }
+    // Add extra field before returning
+    const modifiedResponse = new Response(
+      JSON.stringify({
+        ...responseBody,
+        time: new Date().toISOString(), // add server time
+      }),
+      {
+        status: response.status,
+        headers: { ...Object.fromEntries(response.headers) },
+      }
+    );
 
-    console.log('API response:', data);
+    // Add custom header
+    modifiedResponse.headers.set('X-Message', 'Modified response headers');
 
-    return new Response('Logged API response', { status: 200 });
+    return modifiedResponse;
   } catch (error) {
     console.error('Error fetching API:', error);
-    return new Response('Error occurred', { status: 500 });
+    return new Response(
+      JSON.stringify({ error: 'Failed to fetch API', details: error.message }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
   }
 }
